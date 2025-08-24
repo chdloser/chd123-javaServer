@@ -18,6 +18,12 @@ public class Problem implements Serializable {
     private String code;
     private String title;
     private String description;
+
+    /**
+     * 题目难度
+     * @see DIFFICULTY
+     */
+    private String difficulty;
     @TableField(exist = false)
     private List<String> tags = new ArrayList<>();
     @TableField(exist = false)
@@ -31,13 +37,33 @@ public class Problem implements Serializable {
     public static class ProblemItem{
         public ProblemItem(Problem problem){
             this.id = problem.id;
-            this.problemId = problem.code;
+            this.code = problem.code;
             this.title = problem.title;
             this.tags = problem.tags;
+            this.difficulty = problem.difficulty;
         }
         private Integer id;
-        private String problemId;
+        private String code;
         private String title;
+        private String difficulty;
         private List<String> tags;
+    }
+    public enum DIFFICULTY{
+        /**
+         * 入门
+         */
+        begin,
+        /**
+         * 简单
+         */
+        easy,
+        /**
+         * 中等
+         */
+        medium,
+        /**
+         * 困难
+         */
+        hard
     }
 }
