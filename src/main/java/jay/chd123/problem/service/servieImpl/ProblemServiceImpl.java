@@ -33,7 +33,7 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
     public Integer createProblem(Problem problem) {
         this.save(problem);
         int id = problem.getId();
-        String sCode = problem.getProblemId();
+        String sCode = problem.getCode();
         List<String> inputs = problem.getInputs();
         List<String> outputs = problem.getOutputs();
         List<ProblemCase> caseList = new ArrayList<>();
@@ -41,7 +41,7 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
             if(i == inputs.size()) break;
             ProblemCase pCase = ProblemCase.builder()
                     .sId(id)
-                    .problemId(sCode)
+                    .sCode(sCode)
                     .input(inputs.get(i))
                     .output(outputs.get(i))
                     .type(ProblemCase.TYPE.EXAMPLE.name())
@@ -53,7 +53,7 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
             for(String tagName : problem.getTags()) {
                 ProblemTag tag = new ProblemTag();
                 tag.setSId(id);
-                tag.setProblemId(sCode);
+                tag.setSCode(sCode);
                 tag.setTagName(tagName);
                 tagList.add(tag);
             }
@@ -66,7 +66,7 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
     public Integer updateProblem(Problem problem) {
         this.updateById(problem);
         int id = problem.getId();
-        String sCode = problem.getProblemId();
+        String sCode = problem.getCode();
         List<String> inputs = problem.getInputs();
         List<String> outputs = problem.getOutputs();
         List<ProblemCase> caseList = new ArrayList<>();
@@ -81,7 +81,7 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
             if(i == inputs.size()) break;
             ProblemCase pCase = ProblemCase.builder()
                     .sId(id)
-                    .problemId(sCode)
+                    .sCode(sCode)
                     .input(inputs.get(i))
                     .output(outputs.get(i))
                     .type(ProblemCase.TYPE.EXAMPLE.name())
@@ -93,7 +93,7 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
             for(String tagName : problem.getTags()) {
                 ProblemTag tag = new ProblemTag();
                 tag.setSId(id);
-                tag.setProblemId(sCode);
+                tag.setSCode(sCode);
                 tag.setTagName(tagName);
                 tagList.add(tag);
             }

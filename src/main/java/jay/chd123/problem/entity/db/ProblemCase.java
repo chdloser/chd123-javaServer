@@ -18,7 +18,7 @@ public class ProblemCase {
     }
     private Integer id;
     private Integer sId;
-    private String problemId;
+    private String sCode;
     private String input;
     private String output;
     private String type;

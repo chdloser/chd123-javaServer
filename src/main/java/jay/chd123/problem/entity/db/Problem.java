@@ -15,7 +15,7 @@ public class Problem implements Serializable {
     private static final long serialVersionUID = 1L;
     @TableId
     private Integer id;
-    private String problemId;
+    private String code;
     private String title;
     private String description;
     @TableField(exist = false)
@@ -31,7 +31,7 @@ public class Problem implements Serializable {
     public static class ProblemItem{
         public ProblemItem(Problem problem){
             this.id = problem.id;
-            this.problemId = problem.problemId;
+            this.problemId = problem.code;
             this.title = problem.title;
             this.tags = problem.tags;
         }

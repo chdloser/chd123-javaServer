@@ -8,6 +8,6 @@ import lombok.Data;
 public class ProblemTag {
     private Integer id;
     private Integer sId;
-    private String problemId;
+    private String sCode;
     private String tagName;
 }
