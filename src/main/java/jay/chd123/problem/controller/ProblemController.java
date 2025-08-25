@@ -1,12 +1,17 @@
 package jay.chd123.problem.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import jay.chd123.global.customException.BusinessException;
 import jay.chd123.global.entity.BasePageReturn;
 import jay.chd123.global.entity.BaseViewParam;
 import jay.chd123.global.entity.Result;
+import jay.chd123.problem.entity.db.Problem;
+import jay.chd123.problem.entity.db.ProblemCase;
+import jay.chd123.problem.entity.db.ProblemTag;
 import jay.chd123.problem.entity.reqParam.ReqProblemList;
 import jay.chd123.problem.service.ProblemService;
-import jay.chd123.problem.entity.db.Problem;
+import jay.chd123.problem.service.servieImpl.CaseServiceImpl;
+import jay.chd123.problem.service.servieImpl.TagServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -17,9 +22,13 @@ import java.util.Map;
 @RequestMapping("/game/problem")
 public class ProblemController {
     private final ProblemService problemService;
+    private final CaseServiceImpl caseService;
+    private final TagServiceImpl tagService;
 
-    public ProblemController(ProblemService problemService) {
+    public ProblemController(ProblemService problemService, CaseServiceImpl caseService, TagServiceImpl tagService) {
         this.problemService = problemService;
+        this.caseService = caseService;
+        this.tagService = tagService;
     }
 
     @GetMapping()
@@ -62,6 +71,12 @@ public class ProblemController {
             throw new BusinessException(-1,"缺少参数");
         }
         problemService.removeById(id);
+        QueryWrapper<ProblemTag> tagQueryWrapper = new QueryWrapper<>();
+        tagQueryWrapper.eq("sId", id);
+        tagService.remove(tagQueryWrapper);
+        QueryWrapper<ProblemCase> caseQueryWrapper = new QueryWrapper<>();
+        caseQueryWrapper.eq("sId", id);
+        caseService.remove(caseQueryWrapper);
         return Result.success("delete success");
     }
 
