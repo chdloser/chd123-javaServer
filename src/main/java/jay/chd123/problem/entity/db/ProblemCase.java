@@ -1,5 +1,8 @@
 package jay.chd123.problem.entity.db;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +19,7 @@ public class ProblemCase {
         EXAMPLE,
         JUDGE
     }
+    @TableId(type = IdType.AUTO)
     private Integer id;
     private Integer sId;
     private String sCode;

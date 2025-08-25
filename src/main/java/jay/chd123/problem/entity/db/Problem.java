@@ -1,6 +1,7 @@
 package jay.chd123.problem.entity.db;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
@@ -13,7 +14,7 @@ import java.util.List;
 @Data
 public class Problem implements Serializable {
     private static final long serialVersionUID = 1L;
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Integer id;
     private String code;
     private String title;
@@ -31,7 +32,7 @@ public class Problem implements Serializable {
     @TableField(exist = false)
     private List<String> outputs = new ArrayList<>();
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    LocalDateTime operateTime;
+    private LocalDateTime operateTime;
 
     @Data
     public static class ProblemItem{

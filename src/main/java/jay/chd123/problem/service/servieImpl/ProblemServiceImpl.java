@@ -16,7 +16,9 @@ import jay.chd123.problem.service.ProblemService;
 import jay.chd123.problem.entity.db.Problem;
 import jay.chd123.problem.service.TagService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.beans.Transient;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,6 +32,7 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
         this.tagService = tagService;
     }
     @Override
+    @Transactional
     public Integer createProblem(Problem problem) {
         this.save(problem);
         int id = problem.getId();
