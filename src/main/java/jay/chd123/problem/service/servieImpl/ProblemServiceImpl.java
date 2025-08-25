@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jay.chd123.global.customException.BusinessException;
 import jay.chd123.global.entity.BasePageReturn;
 import jay.chd123.problem.entity.db.Problem;
 import jay.chd123.problem.entity.db.ProblemCase;
@@ -56,7 +57,7 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
 
     @Override
     public Problem getProblemDetail(Integer id, String problemId) {
-        Problem info = new Problem();
+        Problem info;
         if(id != null){
             info = baseMapper.selectById(id);
         }
@@ -64,6 +65,11 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
             QueryWrapper<Problem> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("problemId", problemId);
             info = baseMapper.selectOne(queryWrapper);
+        }else{
+            throw new BusinessException(-1,"缺少查询参数");
+        }
+        if(info==null){
+            throw new BusinessException(-1,"没有匹配数据");
         }
         id = info.getId();
         //查询案例信息，注意只有测试案例
