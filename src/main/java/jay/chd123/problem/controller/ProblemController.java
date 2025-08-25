@@ -81,11 +81,11 @@ public class ProblemController {
     }
 
     @PostMapping("/update")
-    public Result<String> updateProblem(@RequestBody Problem problem) {
+    public Result<Integer> updateProblem(@RequestBody Problem problem) {
         if(problem.getId() == null){
             throw new BusinessException(-1,"缺少参数");
         }
-        problemService.updateProblem(problem);
-        return Result.success("update success");
+        Integer sid = problemService.updateProblem(problem);
+        return Result.success(sid);
     }
 }

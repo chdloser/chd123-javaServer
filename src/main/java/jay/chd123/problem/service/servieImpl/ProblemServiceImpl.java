@@ -8,12 +8,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jay.chd123.global.entity.BasePageReturn;
+import jay.chd123.problem.entity.db.Problem;
 import jay.chd123.problem.entity.db.ProblemCase;
 import jay.chd123.problem.entity.db.ProblemTag;
 import jay.chd123.problem.mapper.ProblemMapper;
 import jay.chd123.problem.service.CaseService;
 import jay.chd123.problem.service.ProblemService;
-import jay.chd123.problem.entity.db.Problem;
 import jay.chd123.problem.service.TagService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,43 +35,14 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
     public Integer createProblem(Problem problem) {
         this.save(problem);
         int id = problem.getId();
-        String sCode = problem.getCode();
-        List<String> inputs = problem.getInputs();
-        List<String> outputs = problem.getOutputs();
-        List<ProblemCase> caseList = new ArrayList<>();
-        for(int i = 0; i < 3; i++) {
-            if(i == inputs.size()) break;
-            ProblemCase pCase = ProblemCase.builder()
-                    .sId(id)
-                    .sCode(sCode)
-                    .input(inputs.get(i))
-                    .output(outputs.get(i))
-                    .type(ProblemCase.TYPE.EXAMPLE.name())
-                    .build();
-            caseList.add(pCase);
-        }
-        List<ProblemTag> tagList = new ArrayList<>();
-        if(problem.getTags()!=null){
-            for(String tagName : problem.getTags()) {
-                ProblemTag tag = new ProblemTag();
-                tag.setSId(id);
-                tag.setSCode(sCode);
-                tag.setTagName(tagName);
-                tagList.add(tag);
-            }
-        }
-        tagService.saveBatch(tagList);
-        caseService.saveBatch(caseList);
+        addTagAndCaseOfProblem(problem);
         return id;
     }
     @Override
+    @Transactional
     public Integer updateProblem(Problem problem) {
         this.updateById(problem);
         int id = problem.getId();
-        String sCode = problem.getCode();
-        List<String> inputs = problem.getInputs();
-        List<String> outputs = problem.getOutputs();
-        List<ProblemCase> caseList = new ArrayList<>();
         QueryWrapper<ProblemTag> tagDelete = new QueryWrapper<>();
         tagDelete.eq("sId", id);
         tagService.remove(tagDelete);
@@ -79,29 +50,7 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
         caseDelete.eq("sId", id);
         caseDelete.eq("type", ProblemCase.TYPE.EXAMPLE.name());
         caseService.remove(caseDelete);
-        for(int i = 0; i < 3; i++) {
-            if(i == inputs.size()) break;
-            ProblemCase pCase = ProblemCase.builder()
-                    .sId(id)
-                    .sCode(sCode)
-                    .input(inputs.get(i))
-                    .output(outputs.get(i))
-                    .type(ProblemCase.TYPE.EXAMPLE.name())
-                    .build();
-            caseList.add(pCase);
-        }
-        List<ProblemTag> tagList = new ArrayList<>();
-        if(problem.getTags()!=null){
-            for(String tagName : problem.getTags()) {
-                ProblemTag tag = new ProblemTag();
-                tag.setSId(id);
-                tag.setSCode(sCode);
-                tag.setTagName(tagName);
-                tagList.add(tag);
-            }
-        }
-        tagService.saveBatch(tagList);
-        caseService.saveBatch(caseList);
+        addTagAndCaseOfProblem(problem);
         return id;
     }
 
@@ -138,7 +87,36 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
         info.setTags(tagList);
         return info;
     }
-
+    private void addTagAndCaseOfProblem(Problem problem) {
+        int id = problem.getId();
+        String sCode = problem.getCode();
+        List<String> inputs = problem.getInputs();
+        List<String> outputs = problem.getOutputs();
+        List<ProblemCase> caseList = new ArrayList<>();
+        for(int i = 0; i < 3; i++) {
+            if(i == inputs.size()) break;
+            ProblemCase pCase = ProblemCase.builder()
+                    .sId(id)
+                    .sCode(sCode)
+                    .input(inputs.get(i))
+                    .output(outputs.get(i))
+                    .type(ProblemCase.TYPE.EXAMPLE.name())
+                    .build();
+            caseList.add(pCase);
+        }
+        List<ProblemTag> tagList = new ArrayList<>();
+        if(problem.getTags()!=null){
+            for(String tagName : problem.getTags()) {
+                ProblemTag tag = new ProblemTag();
+                tag.setSId(id);
+                tag.setSCode(sCode);
+                tag.setTagName(tagName);
+                tagList.add(tag);
+            }
+        }
+        tagService.saveBatch(tagList);
+        caseService.saveBatch(caseList);
+    }
     @Override
     public BasePageReturn<Problem.ProblemItem> getProblemPage(int page, int pageSize, List<String> tags) {
         Page<Problem> pageInfo = new Page<>(page, pageSize);
